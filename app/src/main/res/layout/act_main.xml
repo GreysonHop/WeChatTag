@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/relative_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="15dip"
+        android:background="#fff">
+
+        <TextView
+            android:id="@+id/text5"
+            android:layout_width="85dip"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="分组"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/image5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dip"
+            android:background="@drawable/more_info" />
+
+        <TextView
+            android:id="@+id/tv_group"
+            android:layout_width="fill_parent"
+            android:layout_height="48dip"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dip"
+            android:layout_toLeftOf="@id/image5"
+            android:layout_toRightOf="@id/text5"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip"
+            android:singleLine="true"
+            android:textColor="#333"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</LinearLayout>
