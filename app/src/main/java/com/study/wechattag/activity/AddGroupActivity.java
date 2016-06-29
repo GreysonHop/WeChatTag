@@ -208,8 +208,8 @@ public class AddGroupActivity extends MyBaseActivity
             case -1://新增标签一栏中子视图点击事件处理
                 for(int i = 0; i < llSelectTag.getChildCount(); i++){
                     View view = llSelectTag.getChildAt(i);
-                    if(v.equals(view)){
-                        if(v == clickedSelectTag){//如果当前按到的组件跟上次按的是同一个
+                        if(v.equals(view)){
+                        if(clickedPosition == i){//如果当前按到的组件跟上次按的是同一个
                             llSelectTag.removeViewAt(i);
                             tagsFromEdit.remove(view);
                             Integer num;
@@ -222,17 +222,17 @@ public class AddGroupActivity extends MyBaseActivity
                                 allToCreateMap.remove(num);
                             }
 //                            tagList.remove(i);
-                                clickedSelectTag = null;
+                            clickedPosition = -1;
                         }else{
-                            if(clickedSelectTag == null){//第一次选择
+                            if(clickedPosition == -1){//第一次选择
                             }else{//第二次选择，上次按过不同的一个
-                                TextView text =  (TextView) clickedSelectTag;
+                                TextView text = (TextView)llSelectTag.getChildAt(clickedPosition);
                                 text.setTextColor(getResources().getColor(R.color.app_main_green));
                                 text.getBackground().setLevel(0);
                             }
                             view.getBackground().setLevel(1);//选中状态：1
                             ((TextView)view).setTextColor(getResources().getColor(R.color.app_text_white_color));
-                            clickedSelectTag = llSelectTag.getChildAt(i);
+                            clickedPosition = i;
                         }
                         return;
                     }
@@ -310,7 +310,7 @@ public class AddGroupActivity extends MyBaseActivity
     /**
      * 新增标签一栏中，标记第一次点击的项
      */
-    View clickedSelectTag = null;
+    int clickedPosition = -1;
 
     /**
      * 所有标签一栏中被选中的标签，标签位置和标签View对象
