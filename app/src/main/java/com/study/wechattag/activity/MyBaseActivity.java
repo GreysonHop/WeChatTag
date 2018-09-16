@@ -14,8 +14,13 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.study.wechattag.R;
+
+import java.lang.reflect.Field;
 
 
 /**
@@ -36,50 +41,107 @@ public class MyBaseActivity extends FragmentActivity implements View.OnClickList
         super.onCreate(arg0);
         mContext = this;
 
+//        addStatusViewWithColor(this, R.color.app_main_green);
+
+        /*if(Build.VERSION.SDK_INT >= 23){//解决状态栏浅灰色？
+            try {
+                Class decorViewClazz = Class.forName("com.android.internal.policy.DecorView");
+                Field field = decorViewClazz.getDeclaredField("mSemiTransparentStatusBarColor");
+                field.setAccessible(true);
+                field.setInt(getWindow().getDecorView(), Color.TRANSPARENT);  //改为透明
+            } catch (Exception e) {}
+        }*/
+    }
+
+    /**
+     * Sets the background color for this view. This has some problem!
+     *
+     * @param color the color of the background
+     */
+    public void addStatusViewWithColor(int color) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            int flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+            int flagTranslucentNavigation = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+            Window window = getWindow();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                //5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色
-                Window window = getWindow();
-                View decorView = window.getDecorView();
-                //两个 flag 要结合使用，表示让应用的主体内容占用系统状态栏的空间
-                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-                decorView.setSystemUiVisibility(option);
-                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-                window.setStatusBarColor(Color.TRANSPARENT);
-                //导航栏颜色也可以正常设置
-//                window.setNavigationBarColor(Color.TRANSPARENT);
-            } else {
-                Window window = getWindow();
                 WindowManager.LayoutParams attributes = window.getAttributes();
-                int flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
-                int flagTranslucentNavigation = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
-                attributes.flags |= flagTranslucentStatus;
-//                attributes.flags |= flagTranslucentNavigation;
+                attributes.flags |= flagTranslucentNavigation;
                 window.setAttributes(attributes);
+//                window.setStatusBarColor(Color.TRANSPARENT);
+            } else {
+                WindowManager.LayoutParams attributes = window.getAttributes();
+                attributes.flags |= flagTranslucentStatus | flagTranslucentNavigation;
+                window.setAttributes(attributes);
+            }
+
+            addStatusBar(color, false);
+        }
+    }
+
+    /**
+     * 沉浸状态栏，让内容延伸到状态栏下
+     *
+     * @param willAddStatusBarView 是否添加填充start bar的View
+     * @param color                填充start bar的View的背景色，注意不是colorID
+     * @param needShadow           是否加阴影。某些手机（如5.0-5.1）状态栏字体白色，而且还不能设置为黑的
+     */
+    public void immerseStatusBar(boolean willAddStatusBarView, int color, boolean needShadow) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+            return;
+        }
+
+        Window window = getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ViewGroup decorView = (ViewGroup) window.getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    /*| View.SYSTEM_UI_FLAG_LAYOUT_STABLE*/;
+            decorView.setSystemUiVisibility(option);
+            window.setStatusBarColor(Color.TRANSPARENT);
+
+            if (willAddStatusBarView) {
+                addStatusBar(color, needShadow);
+            }
+
+        } else {
+            WindowManager.LayoutParams attributes = window.getAttributes();
+            int flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+            attributes.flags |= flagTranslucentStatus;
+            window.setAttributes(attributes);
+
+            if (willAddStatusBarView) {
+                addStatusBar(color, needShadow);
             }
         }
 
-        addStatusViewWithColor(this, Color.TRANSPARENT);
     }
 
-    private void addStatusViewWithColor(Activity activity, int color) {
-        //设置 paddingTop
-        ViewGroup rootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+    //在根布局的content中加入statusBar
+    public void addStatusBar(int color, boolean needShadow) {
+        ViewGroup decorView = (ViewGroup) getWindow().getDecorView();
+        ViewGroup rootView = (ViewGroup) decorView.findViewById(Window.ID_ANDROID_CONTENT);
         rootView.setPadding(0, getStatusBarHeight(), 0, 0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            //5.0 以上直接设置状态栏颜色
-            activity.getWindow().setStatusBarColor(color);
-        } else {
-            //根布局添加占位状态栏
-            ViewGroup decorView = (ViewGroup) activity.getWindow().getDecorView();
-            View statusBarView = new View(activity);
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    getStatusBarHeight());
-            statusBarView.setBackgroundColor(color);
-            decorView.addView(statusBarView, lp);
-        }
 
+        //根布局添加占位状态栏
+        ImageView statusBarView = new ImageView(this);
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                getStatusBarHeight());
+        if (needShadow) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                decorView.setSystemUiVisibility(decorView.getSystemUiVisibility() | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            } else {
+                statusBarView.setImageResource(R.drawable.bg_grad_shadow);
+            }
+
+        }
+        statusBarView.setBackgroundColor(color);
+        decorView.addView(statusBarView, lp);
+    }
+
+    public void setTopBarPadding() {
+        View topBar = findViewById(R.id.topBar);
+        if (topBar != null) {
+            topBar.setPadding(0, getStatusBarHeight(), 0, 0);
+        }
     }
 
     public int getStatusBarHeight() {

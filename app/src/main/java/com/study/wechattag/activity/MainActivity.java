@@ -3,6 +3,7 @@ package com.study.wechattag.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,12 +23,16 @@ public class MainActivity extends MyBaseActivity implements View.OnClickListener
     private TextView tvGroup;
     private String groupId;
     private String groupName;
-    //这里是写死数据，所以就算“添加分组”界面新增了分组也不会刷新此分组！但在自己的项目，如果新增了分组，不要忘记更新分组哦！
+    //这里是写死数据，所以就算“添加分组”界面新增了分组也不会刷新此分组！
+    // 但在自己的项目，如果新增了分组，不要忘记更新分组哦！
     private List<Group> groupList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
+
+        immerseStatusBar(true, Color.WHITE, true);
+
         tvGroup = (TextView) findViewById(R.id.tv_group);
         tvGroup.setOnClickListener(this);
         initData();
