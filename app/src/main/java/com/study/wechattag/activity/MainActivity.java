@@ -31,7 +31,8 @@ public class MainActivity extends MyBaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_main);
 
-        immerseStatusBar(true, Color.WHITE, true);
+        setStatusBarViewOptions(true, Color.WHITE, true);
+        immerseStatusBar();
 
         tvGroup = (TextView) findViewById(R.id.tv_group);
         tvGroup.setOnClickListener(this);
@@ -64,6 +65,11 @@ public class MainActivity extends MyBaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        if (v.getId() == R.id.gotoAct) {
+            startActivity(new Intent(this, TestThemeActivity.class));
+            return;
+        }
+
         Intent intent = new Intent();
         switch (v.getId()) {
             case R.id.tv_group://分组标签

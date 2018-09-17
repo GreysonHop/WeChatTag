@@ -45,4 +45,12 @@
             android:textColor="#333"
             android:textSize="16sp" />
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/gotoAct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="me"
+        android:onClick="onClick"/>
+
 </LinearLayout>

@@ -15,6 +15,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.AddGroupActivity" />
+        <activity android:name=".activity.TestThemeActivity" />
     </application>
 
 </manifest>

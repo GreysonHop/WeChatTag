@@ -56,7 +56,8 @@ public class AddGroupActivity extends MyBaseActivity
         super.onCreate(arg0);
         setContentView(R.layout.activity_add_group);
 
-        immerseStatusBar(true, getResources().getColor(R.color.app_main_green), false);
+        setStatusBarViewOptions(true, getResources().getColor(R.color.app_main_green), false);
+        immerseStatusBar();
 
         initView();
         initData();
