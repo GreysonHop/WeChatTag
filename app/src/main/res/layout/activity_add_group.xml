@@ -8,7 +8,7 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/app_main_green" >
+        android:background="@color/app_main_green">
 
         <Button
             android:id="@+id/iv_tools_left"
@@ -58,30 +58,25 @@
         android:background="#fff"
         android:orientation="vertical">
 
-        <LinearLayout
+        <com.study.wechattag.view.MultipleLinearLayout
+            android:id="@+id/ll_group_selected"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.study.wechattag.view.MultipleLinearLayout
-                android:id="@+id/ll_group_selected"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:id="@+id/edit_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/ic_tag_edit_bg"
-                    android:hint="输入分组"
-                    android:maxLength="15"
-                    android:paddingBottom="3dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="3dp"
-                    android:singleLine="true"
-                    android:textSize="15sp" />
-            </com.study.wechattag.view.MultipleLinearLayout>
-        </LinearLayout>
+            <EditText
+                android:id="@+id/edit_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_tag_edit_bg"
+                android:hint="输入分组"
+                android:maxLength="15"
+                android:paddingBottom="3dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:textSize="15sp" />
+        </com.study.wechattag.view.MultipleLinearLayout>
 
         <ImageView
             android:layout_width="match_parent"
@@ -96,18 +91,13 @@
             android:text="所有的分组"
             android:textSize="18sp" />
 
-        <LinearLayout
-            android:id="@+id/ll_group_selected_nor"
+        <com.study.wechattag.view.MultipleLinearLayout
+            android:id="@+id/ll_group_all"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_margin="10dp">
 
-            <com.study.wechattag.view.MultipleLinearLayout
-                android:id="@+id/ll_group_all"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        </com.study.wechattag.view.MultipleLinearLayout>
 
-            </com.study.wechattag.view.MultipleLinearLayout>
-        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

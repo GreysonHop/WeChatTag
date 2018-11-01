@@ -52,21 +52,20 @@ public class AddGroupActivity extends MyBaseActivity
     private String intentStr;////////////////////////////////////////添加“只新增分组”的功能
 
     @Override
-    protected void onCreate(Bundle arg0) {
-        super.onCreate(arg0);
-        setContentView(R.layout.activity_add_group);
-
+    public void init() {
         setStatusBarViewOptions(true, getResources().getColor(R.color.app_main_green), false);
-        immerseStatusBar();
+    }
 
-        initView();
-        initData();
+    @Override
+    public int setLayout() {
+        return R.layout.activity_add_group;
     }
 
     /**
      * 初始化页面
      */
-    private void initView() {
+    @Override
+    public void initView() {
         // 顶部bar
         mTitleText = (TextView) findViewById(R.id.tv_title_center);
         mTitleText.setText("添加分组");
@@ -82,6 +81,7 @@ public class AddGroupActivity extends MyBaseActivity
         llAllTag = (MultipleLinearLayout) findViewById(R.id.ll_group_all);
 
         etTag = (EditText) findViewById(R.id.edit_label);
+        initData();
     }
 
     /**
