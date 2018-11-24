@@ -2,5 +2,7 @@
 <resources>
     <declare-styleable name="FlowTagView">
         <attr name="tvTagResId" format="reference" />
+        <!-- 组件是否只支持单选 -->
+        <attr name="tvSingleSelect" format="boolean" />
     </declare-styleable>
 </resources>

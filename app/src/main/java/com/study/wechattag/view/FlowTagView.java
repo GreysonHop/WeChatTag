@@ -26,6 +26,7 @@ public class FlowTagView extends MultipleLinearLayout {
 
 
     private int mTagResId;
+    private boolean isSingleSelect;
 
 
     public FlowTagView(Context context) {
@@ -48,6 +49,7 @@ public class FlowTagView extends MultipleLinearLayout {
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.FlowTagView, defStyleAttr, 0);
 
         mTagResId = typedArray.getResourceId(R.styleable.FlowTagView_tvTagResId, 0);
+        isSingleSelect = typedArray.getBoolean(R.styleable.FlowTagView_tvSingleSelect, false);
 
         typedArray.recycle();
     }
@@ -73,12 +75,12 @@ public class FlowTagView extends MultipleLinearLayout {
 
         for (int i = 0; i < tagList.size(); i++) {
             String title = tagList.get(i);
-            addView(createDefaultTag(title, i));
+            addView(createTagView(title, i));
         }
 
     }
 
-    private View createDefaultTag(String contain, int position) {
+    private View createTagView(String content, int position) {
         TextView textView;
         if (mTagResId != 0) {
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -118,7 +120,7 @@ public class FlowTagView extends MultipleLinearLayout {
             textView.setLayoutParams(params);
         }
 
-        textView.setText(contain);
+        textView.setText(content);
         textView.setTag(position);
 
         textView.setOnClickListener(new OnClickListener() {
@@ -136,14 +138,43 @@ public class FlowTagView extends MultipleLinearLayout {
             return;
         }
 
-        if (selectedPosition[position] == 1) {
-            view.getBackground().setLevel(0);
-            view.setSelected(false);
-            selectedPosition[position] = 0;
+        if (isSingleSelect) {
+            //单选模式
+            if (selectedPosition[position] == 1) {
+                //点击的刚好是上次选中的项
+                view.getBackground().setLevel(0);
+                view.setSelected(false);
+                selectedPosition[position] = 0;
+
+            } else {
+                //点击的是新的项
+                for (int i = 0; i < selectedPosition.length; i++) {//先遍历搜索已经选中的项
+                    if (selectedPosition[i] == 1) {
+                        View tempView = getChildAt(i);
+                        tempView.getBackground().setLevel(0);
+                        tempView.setSelected(false);
+                        selectedPosition[i] = 0;//将已选中的项变为未选
+                        break;
+                    }
+                }
+                //再把当前点击项变为选中状态
+                view.getBackground().setLevel(1);
+                view.setSelected(true);
+                selectedPosition[position] = 1;
+            }
+
         } else {
-            view.getBackground().setLevel(1);
-            view.setSelected(true);
-            selectedPosition[position] = 1;
+            //多选模式
+            if (selectedPosition[position] == 1) {
+                view.getBackground().setLevel(0);
+                view.setSelected(false);
+                selectedPosition[position] = 0;
+            } else {
+                view.getBackground().setLevel(1);
+                view.setSelected(true);
+                selectedPosition[position] = 1;
+            }
+
         }
     }
 

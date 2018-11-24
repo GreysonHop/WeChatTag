@@ -28,6 +28,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp"
         android:background="@drawable/ic_tag_new_bg"
+        app:tvSingleSelect="true"
         app:tvTagResId="@layout/item_tag_text" />
 
     <com.study.wechattag.view.FlowTagView

@@ -37,7 +37,7 @@ public class TestThemeActivity extends MyBaseActivity implements View.OnClickLis
         tagList.add("#制服の诱惑");
         tagList.add("#小女妖的自拍秀");
         tagList.add("#爆笑内涵段子");
-        tagList.add("#滴滴表白");
+        tagList.add("#表白");
         tagList.add("#新手上路");
         tagList.add("#逗比欢乐多");
         tagList.add("#心情随笔录");
