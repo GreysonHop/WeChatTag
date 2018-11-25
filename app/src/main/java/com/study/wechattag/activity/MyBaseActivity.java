@@ -26,7 +26,7 @@ import java.lang.reflect.Field;
 
 
 /**
- * Created by hx on 2015/11/13.
+ * Created by Greyson on 2015/11/13.
  */
 public abstract class MyBaseActivity extends FragmentActivity implements View.OnClickListener {
 

@@ -7,15 +7,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.MainActivity">
+        <activity android:name=".activity.MainActivityKt">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".activity.AddGroupActivity" />
         <activity android:name=".activity.TestThemeActivity" />
+
+        <activity android:name=".activity.TestThemeActivityKt" />
+        <activity android:name=".activity.AddGroupActivityKt" />
+        <activity android:name=".activity.MainActivity" />
     </application>
 
 </manifest>
