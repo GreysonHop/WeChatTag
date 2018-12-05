@@ -76,15 +76,17 @@ class MainActivityKt : MyBaseActivity(), View.OnClickListener {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == 0) {
-            val name = data.getStringExtra("groupName")
-            val id = data.getStringExtra("groupId")
-            Log.i("MainActivity", "groupId$id- groupName$name")
-            tvGroup!!.text = name
-            groupId = id
-            groupName = name
+            data?.let {
+                val name = it.getStringExtra("groupName")
+                val id = it.getStringExtra("groupId")
+                Log.i("MainActivity", "groupId$id- groupName$name")
+                tvGroup!!.text = name
+                groupId = id
+                groupName = name
+            }
         }
     }
 }

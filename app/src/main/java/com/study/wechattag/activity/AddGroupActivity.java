@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.study.wechattag.R;
 import com.study.wechattag.model.Group;
+import com.study.wechattag.view.MultiLineLinearLayout;
 import com.study.wechattag.view.MultipleLinearLayout;
 
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class AddGroupActivity extends MyBaseActivity
      */
     List<View> tagsFromEdit = new ArrayList<>();
     MultipleLinearLayout llSelectTag;//要新增或删除标签的自定义组件
-    MultipleLinearLayout llAllTag;//包含所有标签的自定义组件
+    MultiLineLinearLayout llAllTag;//包含所有标签的自定义组件
     /**
      * 添加标签的输入框
      */
@@ -78,7 +79,7 @@ public class AddGroupActivity extends MyBaseActivity
 
         llSelectTag = (MultipleLinearLayout) findViewById(R.id.ll_group_selected);
         llSelectTag.setOnChildViewAreaListener(this);//设置多行LinearLayout的子视图区间点击监听器
-        llAllTag = (MultipleLinearLayout) findViewById(R.id.ll_group_all);
+        llAllTag = (MultiLineLinearLayout) findViewById(R.id.ll_group_all);
 
         etTag = (EditText) findViewById(R.id.edit_label);
         initData();
