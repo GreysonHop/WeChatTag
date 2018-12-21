@@ -15,7 +15,7 @@
 
 第二个组件点击进去的是多行LinearLayout组件的拓展功能展示，下面再介绍。
 
-![首页](https://git-res.nos-eastchina1.126.net/wechatTag/git_wechatTag_main.png)
+![main](https://git-res.nos-eastchina1.126.net/wechatTag/git_wechatTag_main.png)
 
 #### 添加分组-界面
 
