@@ -18,15 +18,15 @@
         android:background="@drawable/ic_tag_new_bg"
         android:onClick="onClick"
         android:padding="10dp"
-        android:text="show"
+        android:text="显示第一个标签框中的选择结果"
         android:textSize="20sp" />
 
     <com.study.wechattag.view.FlowTagView
         android:id="@+id/flowTagView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:layout_marginStart="15dp"
+        android:padding="10dp"
+        android:layout_margin="10dp"
         android:background="@drawable/ic_tag_new_bg"
         app:tvSingleSelect="true"
         app:tvTagResId="@layout/item_tag_text" />
