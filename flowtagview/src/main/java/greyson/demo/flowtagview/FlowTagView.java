@@ -1,4 +1,4 @@
-package com.study.wechattag.view;
+package greyson.demo.flowtagview;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.study.wechattag.R;
 
 import java.util.ArrayList;
 import java.util.List;

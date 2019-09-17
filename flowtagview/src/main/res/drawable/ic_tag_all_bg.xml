@@ -3,14 +3,14 @@
 
     <item android:maxLevel="0">
         <shape android:shape="rectangle">
-            <stroke android:color="@color/app_text_default_color" android:width="1dp"/>
+            <stroke android:color="@color/flowTagView_unchecked" android:width="1dp"/>
             <solid android:color="@android:color/transparent"/>
             <corners android:radius="15dp"/>
         </shape>
     </item>
     <item android:maxLevel="1">
         <shape android:shape="rectangle">
-            <stroke android:color="@color/app_main_green" android:width="1dp"/>
+            <stroke android:color="@color/flowTagView_checked" android:width="1dp"/>
             <solid android:color="@android:color/transparent"/>
             <corners android:radius="15dp"/>
         </shape>

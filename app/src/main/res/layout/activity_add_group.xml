@@ -58,7 +58,7 @@
         android:background="#fff"
         android:orientation="vertical">
 
-        <com.study.wechattag.view.MultipleLinearLayout
+        <greyson.demo.flowtagview.MultipleLinearLayout
             android:id="@+id/ll_group_selected"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -76,7 +76,7 @@
                 android:paddingTop="3dp"
                 android:singleLine="true"
                 android:textSize="15sp" />
-        </com.study.wechattag.view.MultipleLinearLayout>
+        </greyson.demo.flowtagview.MultipleLinearLayout>
 
         <ImageView
             android:layout_width="match_parent"

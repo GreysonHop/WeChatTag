@@ -4,7 +4,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.study.wechattag.R
-import com.study.wechattag.view.FlowTagView
+import greyson.demo.flowtagview.FlowTagView
 
 /**
  * Created by Greyson on 2018/11/25.

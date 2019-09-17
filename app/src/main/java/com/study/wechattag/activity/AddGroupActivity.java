@@ -1,6 +1,5 @@
 package com.study.wechattag.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,11 +18,12 @@ import android.widget.Toast;
 import com.study.wechattag.R;
 import com.study.wechattag.model.Group;
 import com.study.wechattag.view.MultiLineLinearLayout;
-import com.study.wechattag.view.MultipleLinearLayout;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import greyson.demo.flowtagview.MultipleLinearLayout;
 
 
 /**

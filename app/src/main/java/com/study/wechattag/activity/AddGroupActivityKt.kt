@@ -18,7 +18,7 @@ import android.widget.Toast
 import com.study.wechattag.R
 import com.study.wechattag.model.Group
 import com.study.wechattag.view.MultiLineLinearLayout
-import com.study.wechattag.view.MultipleLinearLayout
+import greyson.demo.flowtagview.MultipleLinearLayout
 
 import java.util.ArrayList
 import java.util.HashMap
@@ -76,7 +76,7 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
                 } else {
                     Toast.makeText(mContext, "create success", Toast.LENGTH_SHORT).show()
                 }
-            //修改用户分组信息
+                //修改用户分组信息
                 1 -> {
                     closeLoadingDialog()
                     if ("0" == msg.data.getString("code")) {

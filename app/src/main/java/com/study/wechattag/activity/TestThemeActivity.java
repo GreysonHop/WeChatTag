@@ -5,10 +5,11 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.study.wechattag.R;
-import com.study.wechattag.view.FlowTagView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import greyson.demo.flowtagview.FlowTagView;
 
 /**
  * Created by Greyson on 2016/4/26.

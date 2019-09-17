@@ -1,4 +1,4 @@
-package com.study.wechattag.view;
+package greyson.demo.flowtagview;
 
 import android.content.Context;
 import android.util.AttributeSet;
