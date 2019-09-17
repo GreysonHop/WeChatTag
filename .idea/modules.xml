@@ -3,9 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WeChatTag.iml" filepath="$PROJECT_DIR$/WeChatTag.iml" />
-      <module fileurl="file://E:\GitRepository\WeChatTag\WeChatTag.iml" filepath="E:\GitRepository\WeChatTag\WeChatTag.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://E:\GitRepository\WeChatTag\app\app.iml" filepath="E:\GitRepository\WeChatTag\app\app.iml" />
     </modules>
   </component>
 </project>

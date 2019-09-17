@@ -18,16 +18,16 @@
         android:background="@drawable/ic_tag_new_bg"
         android:onClick="onClick"
         android:padding="10dp"
-        android:text="显示第一个标签框中的选择结果"
-        android:textSize="20sp" />
+        android:text="点击此处显示第一个标签框中的选择结果"
+        android:textSize="16sp" />
 
     <com.study.wechattag.view.FlowTagView
         android:id="@+id/flowTagView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
         android:layout_margin="10dp"
         android:background="@drawable/ic_tag_new_bg"
+        android:padding="10dp"
         app:tvSingleSelect="true"
         app:tvTagResId="@layout/item_tag_text" />
 
@@ -35,9 +35,9 @@
         android:id="@+id/flowTagView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="25dp"
+        android:layout_marginEnd="15dp"
         android:background="@drawable/ic_tag_new_bg" />
 
 </LinearLayout>
