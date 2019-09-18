@@ -1,6 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.303597336'
+group='com.github.GreysonHop'
 
 android {
     compileSdkVersion 28
