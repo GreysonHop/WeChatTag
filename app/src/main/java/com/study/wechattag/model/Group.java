@@ -1,8 +1,11 @@
 package com.study.wechattag.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class Group implements Serializable {
+public class Group implements Serializable, Parcelable {
     public String groupName; //分组名
     public String groupId; //分组Id
     public String userId; //该分组所属用户的Id
@@ -39,4 +42,40 @@ public class Group implements Serializable {
     public void setUserId(String userId) {
         this.userId = userId;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.groupName);
+        dest.writeString(this.groupId);
+        dest.writeString(this.userId);
+        dest.writeString(this.groupCount);
+    }
+
+    public Group() {
+    }
+
+    protected Group(Parcel in) {
+        this.groupName = in.readString();
+        this.groupId = in.readString();
+        this.userId = in.readString();
+        this.groupCount = in.readString();
+    }
+
+    public static final Parcelable.Creator<Group> CREATOR = new Parcelable.Creator<Group>() {
+        @Override
+        public Group createFromParcel(Parcel source) {
+            return new Group(source);
+        }
+
+        @Override
+        public Group[] newArray(int size) {
+            return new Group[size];
+        }
+    };
 }

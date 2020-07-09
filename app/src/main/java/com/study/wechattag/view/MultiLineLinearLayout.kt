@@ -11,7 +11,7 @@ import android.view.ViewGroup
  */
 class MultiLineLinearLayout : ViewGroup {
 
-    val TAG = "MultiLineLinearLayout"
+    private val TAG = "MultiLineLinearLayout"
 
     constructor(cxt: Context) : super(cxt)
 
@@ -24,7 +24,7 @@ class MultiLineLinearLayout : ViewGroup {
         val width = MeasureSpec.getSize(widthMeasureSpec)
         var nextX = 0
         var currentHeight = 0
-        var currentWidth = 0
+        val currentWidth: Int
         val count = this.childCount
 
         //当前View的padding
@@ -36,7 +36,7 @@ class MultiLineLinearLayout : ViewGroup {
 
         // 设置子空间Child的宽高
         for (i in 0 until count) {
-            var childView = getChildAt(i)
+            val childView = getChildAt(i)
             childView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
             //子View的margin
@@ -44,8 +44,8 @@ class MultiLineLinearLayout : ViewGroup {
             var marginTop = 0
             var marginRight = 0
             var marginBottom = 0
-            if (childView.layoutParams is ViewGroup.MarginLayoutParams) {
-                val params = childView.layoutParams as ViewGroup.MarginLayoutParams
+            if (childView.layoutParams is MarginLayoutParams) {
+                val params = childView.layoutParams as MarginLayoutParams
                 marginLeft = params.leftMargin
                 marginTop = params.topMargin
                 marginRight = params.rightMargin
@@ -114,7 +114,7 @@ class MultiLineLinearLayout : ViewGroup {
     }
 
     override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams {
-        return ViewGroup.MarginLayoutParams(context, attrs)
+        return MarginLayoutParams(context, attrs)
     }
 
     /**

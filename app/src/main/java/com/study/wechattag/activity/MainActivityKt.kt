@@ -5,12 +5,10 @@ import android.content.Intent
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-
 import com.study.wechattag.R
 import com.study.wechattag.model.Group
-
 import java.io.Serializable
-import java.util.ArrayList
+import java.util.*
 
 /**
  * Created by Greyson on 2016/4/26.
@@ -70,7 +68,8 @@ class MainActivityKt : MyBaseActivity(), View.OnClickListener {
                 intent.putExtra("userId", "101")//这里随便传的，大家传自己要更新分组信息的用户ID
                 intent.putExtra("groupId", groupId)//传入原来拥有的标签ID
                 intent.putExtra("groupName", groupName)//传入原本拥有的标签名
-                intent.putExtra("groupList", groupList as Serializable)
+                // intent.putExtra("groupList", groupList as Serializable)
+                intent.putParcelableArrayListExtra("groupList", groupList)
                 startActivityForResult(intent, 0)
             }
         }
@@ -78,7 +77,7 @@ class MainActivityKt : MyBaseActivity(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == 0) {
+        if (resultCode == RESULT_OK) {
             data?.let {
                 val name = it.getStringExtra("groupName")
                 val id = it.getStringExtra("groupId")

@@ -5,12 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import android.util.Log
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.View
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -23,27 +23,33 @@ import greyson.demo.flowtagview.MultipleLinearLayout
 import java.util.ArrayList
 import java.util.HashMap
 
-
 /**
  * Created by Greyson on 2016/3/17 0017.
  * 给患者分组并可以添加新分组的界面
  */
 class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinearLayout.OnChildViewAreaListener {
-    private var groupList: List<Group> = ArrayList()  //分组集合
+    companion object {
+        private const val TAG = "AddGroupActivity"
+        private const val MSG_ADD_GROUP = 0x10
+        private const val MSG_ALTER_GROUP = 0x11
 
-    //    private String from ;  //
+        private const val VIEW_ID_ALL_TAG = 0
+
+        private const val CODE_SUCCESS = "code_success"
+    }
+
+    private lateinit var groupList: List<Group>  //分组集合
 
     /**
      * 手动输入、待上传的标签集合
      */
     private var tagsFromEdit: MutableList<View> = ArrayList()
-    private var llSelectTag: MultipleLinearLayout? = null//要新增或删除标签的自定义组件
-    private var llAllTag: MultiLineLinearLayout? = null//包含所有标签的自定义组件
+    private lateinit var llSelectTag: MultipleLinearLayout//要新增或删除标签的自定义组件
+    private lateinit var llAllTag: MultiLineLinearLayout//包含所有标签的自定义组件
     /**
      * 添加标签的输入框
      */
-    private var etTag: EditText? = null
-    private val TAG = "AddGroupActivity"
+    private lateinit var etTag: EditText
     /**
      * 当前界面的操作意图，"createGroup"即只创建新的分组
      */
@@ -62,24 +68,24 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
      */
     private var userId: String? = null
 
-    internal var mHandler: Handler = object : Handler() {
+    private var mHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
-                0   //添加分组
-                -> if ("0" == msg.data.getString("code")) {
+                //添加分组
+                MSG_ADD_GROUP -> if (CODE_SUCCESS == msg.data.getString("code")) {
 
                     Toast.makeText(this@AddGroupActivityKt, "添加分组成功", Toast.LENGTH_LONG).show()
                     val result = msg.data.getString("groupId")
                     Log.i(TAG, "返回的ID:" + result!!)
-                    uploadedGroupId = result//如果新增了分组，不要忘记更新分组哦
+                    uploadedGroupId = result //如果新增了分组，不要忘记更新分组哦
                     savePatientGroupInfo()
                 } else {
                     Toast.makeText(mContext, "create success", Toast.LENGTH_SHORT).show()
                 }
                 //修改用户分组信息
-                1 -> {
+                MSG_ALTER_GROUP -> {
                     closeLoadingDialog()
-                    if ("0" == msg.data.getString("code")) {
+                    if (CODE_SUCCESS == msg.data.getString("code")) {
                         Toast.makeText(mContext, "修改分组成功", Toast.LENGTH_SHORT).show()
                         groupName = newGroupName
                         groupId = newGroupId
@@ -88,8 +94,7 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
                         Toast.makeText(mContext, "修改分组失败，请重试", Toast.LENGTH_SHORT).show()
                     }
                 }
-                else -> {
-                }
+
             }
 
         }
@@ -126,7 +131,7 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
             var groupId: String? = ""
             if (selectedInAllMap.size != 0) {
                 for (position in selectedInAllMap.keys) {
-                    Log.i(TAG, "有新增标签是从所有标签中选出的,位置为：" + position)
+                    Log.i(TAG, "有新增标签是从所有标签中选出的,位置为：$position")
                     val temp = groupList[position]
                     if ("" != groupId)
                         groupId += "," + temp.getGroupId()
@@ -154,11 +159,11 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
     val newGroupName: String
         get() {
             var groupName = ""
-            for (i in 0 until llSelectTag!!.childCount - 1) {
+            for (i in 0 until llSelectTag.childCount - 1) {
                 if ("" == groupName)
-                    groupName = (llSelectTag!!.getChildAt(i) as TextView).text.toString()
+                    groupName = (llSelectTag.getChildAt(i) as TextView).text.toString()
                 else
-                    groupName += "," + (llSelectTag!!.getChildAt(i) as TextView).text.toString()
+                    groupName += "," + (llSelectTag.getChildAt(i) as TextView).text.toString()
             }
             return groupName
         }
@@ -182,7 +187,7 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
         }
 
     override fun init() {
-        setStatusBarViewOptions(true, resources.getColor(R.color.app_main_green), false)
+        setStatusBarViewOptions(true, ContextCompat.getColor(this, R.color.app_main_green), false)
     }
 
     override fun setLayout(): Int {
@@ -194,20 +199,20 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
      */
     override fun initView() {
         // 顶部bar
-        mTitleText = findViewById<View>(R.id.tv_title_center) as TextView
+        mTitleText = findViewById(R.id.tv_title_center)
         mTitleText.text = "添加分组"
-        mLeftBtn = findViewById<View>(R.id.iv_tools_left) as Button
+        mLeftBtn = findViewById(R.id.iv_tools_left)
         mLeftBtn.setOnClickListener(this)
-        mRightBtn = findViewById<View>(R.id.iv_tools_right) as Button
+        mRightBtn = findViewById(R.id.iv_tools_right)
         mRightBtn.setOnClickListener(this)
         mRightBtn.text = "保存"
         mRightBtn.visibility = View.VISIBLE
 
-        llSelectTag = findViewById<View>(R.id.ll_group_selected) as MultipleLinearLayout
-        llSelectTag?.mOnChildViewAreaListener = this//设置多行LinearLayout的子视图区间点击监听器
-        llAllTag = findViewById<View>(R.id.ll_group_all) as MultiLineLinearLayout
+        llSelectTag = findViewById(R.id.ll_group_selected)
+        llSelectTag.mOnChildViewAreaListener = this//设置多行LinearLayout的子视图区间点击监听器
+        llAllTag = findViewById(R.id.ll_group_all)
 
-        etTag = findViewById<View>(R.id.edit_label) as EditText
+        etTag = findViewById(R.id.edit_label)
         initData()
     }
 
@@ -216,7 +221,7 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
      */
     private fun initData() {
         val intent = this.intent
-        groupList = intent.getSerializableExtra("groupList") as List<Group>
+        groupList = intent.getParcelableArrayListExtra("groupList") ?: ArrayList()
         intentStr = intent.getStringExtra("intent")
 
         groupName = intent.getStringExtra("groupName")
@@ -231,28 +236,28 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
             et.setSingleLine()
             et.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             et.setBackgroundResource(R.drawable.ic_tag_all_bg)
-            et.setPadding(etTag!!.paddingLeft, etTag!!.paddingTop, etTag!!.paddingRight, etTag!!.paddingBottom)
+            et.setPadding(etTag.paddingLeft, etTag.paddingTop, etTag.paddingRight, etTag.paddingBottom)
             et.text = tempGroupName
 
             val patternStr = "," + groupList[i].getGroupId() + ","
             Log.i(TAG, "要匹配的pattern:$patternStr-groupId:$groupIdForMatch")
             if (groupIdForMatch.contains(patternStr)) {//匹配则说明全部标签一栏中此View要添加到新增一栏
-                et.setTextColor(resources.getColor(R.color.app_main_green))
+                et.setTextColor(ContextCompat.getColor(this, R.color.app_main_green))
                 et.background.level = 1
                 val newView = addTag(tempGroupName)
-                allToCreateMap.put(i, newView)
-                createToAllMap.put(newView, i)
-                selectedInAllMap.put(i, et)
+                allToCreateMap[i] = newView
+                createToAllMap[newView] = i
+                selectedInAllMap[i] = et
             } else {
-                et.setTextColor(resources.getColor(R.color.text_black))
+                et.setTextColor(ContextCompat.getColor(this, R.color.text_black))
             }
 
-            et.id = 0
+            et.id = VIEW_ID_ALL_TAG
             if ("createGroup" != intentStr) {
-                //                Log.i(TAG, "intentStr:"+intentStr);
+                // Log.i(TAG, "intentStr:"+intentStr);
                 et.setOnClickListener(this)
             }
-            llAllTag?.addView(et)
+            llAllTag.addView(et)
         }
 
     }
@@ -271,14 +276,14 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
                 if ("" != groupNameFromEdit) {
                     showLoadingDialog("", "正在上传新分组...", false)
                     Log.i(TAG, "onClick() 新的标签：$newGroupName-要上传的标签：$groupNameFromEdit")
-                    //                    Http_addGroup_Event event = new Http_addGroup_Event(getGroupNameFromEdit(), MyDataUtil.getDocId(mContext));
+                    // Http_addGroup_Event event = new Http_addGroup_Event(getGroupNameFromEdit(), MyDataUtil.getDocId(mContext));
 
                     //这里模仿请求网络，让后台保存新添加的分组标签名，并且返回他们对应的ID数组。
                     mLoadingDialog = ProgressDialog.show(mContext, "", "正在保存新分组", true)
                     val msg = Message()
-                    msg.what = 0
+                    msg.what = MSG_ADD_GROUP
                     val bundle = Bundle()
-                    bundle.putString("code", "0")
+                    bundle.putString("code", CODE_SUCCESS)
                     bundle.putString("groupId", "6,7")//返回数据的格式，这里写死了，如果是自己的后台就要返回自己新增分组后分组的ID，有几个就返回几个
                     msg.data = bundle
                     mHandler.sendMessage(msg)
@@ -286,67 +291,71 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
                 } else {//如果没有要创建的分组，则直接保存用户的分组信息
                     savePatientGroupInfo()
                 }
-            -1//新增标签一栏中子视图点击事件处理
-            -> for (i in 0 until llSelectTag!!.childCount) {
-                val view = llSelectTag!!.getChildAt(i)
+
+            //新增标签一栏中子视图点击事件处理
+            -1 -> for (i in 0 until llSelectTag.childCount) {
+                val view = llSelectTag.getChildAt(i)
                 if (v == view) {
                     if (v === clickedSelectTag) {//如果当前按到的组件跟上次按的是同一个
-                        llSelectTag!!.removeViewAt(i)
+                        llSelectTag.removeViewAt(i)
                         tagsFromEdit.remove(view)
                         val num = createToAllMap[view]
                         if (num != null) {
 //                        if ((num = createToAllMap[view]) != null) {
                             createToAllMap.remove(view)
-                            val temp = llAllTag!!.getChildAt(num!!)
+                            val temp = llAllTag.getChildAt(num)
                             temp.background.level = 0
-                            (temp as TextView).setTextColor(resources.getColor(R.color.text_black))
+                            (temp as TextView).setTextColor(ContextCompat.getColor(this, R.color.text_black))
                             selectedInAllMap.remove(num)
                             allToCreateMap.remove(num)
                         }
-                        //                            tagList.remove(i);
+                        // tagList.remove(i);
                         clickedSelectTag = null
                     } else {
                         if (clickedSelectTag == null) {//第一次选择
                         } else {//第二次选择，上次按过不同的一个
-                            val text = clickedSelectTag as TextView?
-                            text!!.setTextColor(resources.getColor(R.color.app_main_green))
-                            text.background.level = 0
+                            (clickedSelectTag as? TextView)?.apply {
+                                setTextColor(ContextCompat.getColor(this@AddGroupActivityKt, R.color.app_main_green))
+                                background.level = 0
+                            }
                         }
                         view.background.level = 1//选中状态：1
-                        (view as TextView).setTextColor(resources.getColor(R.color.app_text_white_color))
-                        clickedSelectTag = llSelectTag!!.getChildAt(i)
+                        (view as TextView).setTextColor(ContextCompat.getColor(this, R.color.app_text_white_color))
+                        clickedSelectTag = llSelectTag.getChildAt(i)
                     }
                     return
                 }
             }
-            0//全部标签一栏中子视图点击事件处理
-            -> for (i in 0 until llAllTag!!.childCount) {
-                val view = llAllTag!!.getChildAt(i)
+
+            //全部标签一栏中子视图点击事件处理
+            VIEW_ID_ALL_TAG -> for (i in 0 until llAllTag.childCount) {
+                val view = llAllTag.getChildAt(i)
                 if (v == view) {
                     for (position in selectedInAllMap.keys) {//判断点击的项是否已经点击过
                         if (position == i) {
                             val temp = selectedInAllMap[i]
-                            temp?.getBackground()?.level = 0
-                            (temp as TextView).setTextColor(resources.getColor(R.color.text_black))
-                            //                                Log.i("ActWeChatTag", "要添加的顶对应位置：" + i + "-" + allToCreateMap.get(i));
+                            temp?.background?.level = 0
+                            (temp as TextView).setTextColor(ContextCompat.getColor(this, R.color.text_black))
+                            // Log.i("ActWeChatTag", "要添加的顶对应位置：" + i + "-" + allToCreateMap.get(i));
                             createToAllMap.remove(allToCreateMap[i])
-                            llSelectTag!!.removeView(allToCreateMap[i])
-                            //                                tagList.remove(i);//这里暂时无法获取到达新增标签一栏中的子视图对应位置
+                            llSelectTag.removeView(allToCreateMap[i])
+                            // tagList.remove(i);//这里暂时无法获取到达新增标签一栏中的子视图对应位置
                             selectedInAllMap.remove(i)
                             allToCreateMap.remove(i)
                             return
                         }
                     }
                     view.background.level = 1
-                    (view as TextView).setTextColor(resources.getColor(R.color.app_main_green))
+                    (view as TextView).setTextColor(ContextCompat.getColor(this, R.color.app_main_green))
                     val newView = addTag(view.text.toString())
-                    allToCreateMap.put(i, newView)
-                    createToAllMap.put(newView, i)
-                    selectedInAllMap.put(i, view)
-                    //                        Log.i("ActWeChatTag", "要添加的顶对应位置："+i+"-");
+                    allToCreateMap[i] = newView
+                    createToAllMap[newView] = i
+                    selectedInAllMap[i] = view
+                    // Log.i("ActWeChatTag", "要添加的顶对应位置："+i+"-");
                     return
                 }
             }
+
         }
     }
 
@@ -377,21 +386,21 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
         textView.setSingleLine()
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
         textView.setBackgroundResource(R.drawable.ic_tag_new_bg)
-        textView.setPadding(etTag!!.paddingLeft, etTag!!.paddingTop, etTag!!.paddingRight, etTag!!.paddingBottom)
+        textView.setPadding(etTag.paddingLeft, etTag.paddingTop, etTag.paddingRight, etTag.paddingBottom)
 
         textView.text = contain
-        textView.setTextColor(resources.getColor(R.color.app_main_green))
+        textView.setTextColor(ContextCompat.getColor(this, R.color.app_main_green))
         textView.setOnClickListener(this)
-        val positionToAdd = llSelectTag!!.childCount - 1
-        llSelectTag!!.addView(textView, positionToAdd)
+        val positionToAdd = llSelectTag.childCount - 1
+        llSelectTag.addView(textView, positionToAdd)
 
         return textView
     }
 
     override fun onChildViewAreaOut() {
-        if (!TextUtils.isEmpty(etTag!!.text.toString())) {
-            tagsFromEdit.add(addTag(etTag!!.text.toString()))
-            etTag!!.setText("")
+        if (!TextUtils.isEmpty(etTag.text.toString())) {
+            tagsFromEdit.add(addTag(etTag.text.toString()))
+            etTag.setText("")
         }
     }
 
@@ -407,10 +416,10 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
             closeLoadingDialog()
             setResultAndBack()
         } else {
-            val testid = newGroupId
-            Log.i(TAG, "更新患者分组信息groupId：$testid-uploadedGroupId:$uploadedGroupId")
+            val testId = newGroupId
+            Log.i(TAG, "更新患者分组信息groupId：$testId-uploadedGroupId:$uploadedGroupId")
 
-            updateGroup(testid)
+            updateGroup(testId)
         }
     }
 
@@ -421,9 +430,9 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
      */
     private fun updateGroup(groupIds: String?) {
         val msg = Message()
-        msg.what = 1
+        msg.what = MSG_ALTER_GROUP
         val bundle = Bundle()
-        bundle.putString("code", "0")
+        bundle.putString("code", CODE_SUCCESS)
         msg.data = bundle
         mHandler.sendMessage(msg)
     }
@@ -435,7 +444,7 @@ class AddGroupActivityKt : MyBaseActivity(), View.OnClickListener, MultipleLinea
         val intent = Intent()
         intent.putExtra("groupName", groupName)
         intent.putExtra("groupId", groupId)
-        setResult(0, intent)
+        setResult(RESULT_OK, intent)
 
         finish()
     }
